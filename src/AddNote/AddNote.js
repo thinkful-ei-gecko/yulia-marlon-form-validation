@@ -7,8 +7,10 @@ class AddNote extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-      folderId: ''
-    }
+			name: '',
+			folderId: ''
+		}
+		
     this.nameInput = React.createRef();
     this.contentInput = React.createRef();
 	}
@@ -20,7 +22,7 @@ class AddNote extends React.Component {
 
 		const newNote = JSON.stringify({
 			id: cuid(),
-      name: this.nameInput.current.value,
+      name: this.state.name,
       modified: new Date(),
       folderId: this.state.folderId,
       content: this.contentInput.current.value,
@@ -47,7 +49,13 @@ class AddNote extends React.Component {
     this.setState({
       folderId: e.target.value
     })
-  }
+	}
+	
+	handleNameInput = (e) => {
+		this.setState({
+			name: e.target.value
+		})
+	}
 
 	render() {
     console.log(this.state.folderId);
@@ -65,7 +73,8 @@ class AddNote extends React.Component {
 					id="note-name" 
 					type="text" 
 					name="note-name"
-					ref={this.nameInput}>
+					onChange={e => this.handleNameInput(e)}
+					>
 					</input>
           <label htmlFor="content">Content</label>
           <textarea id="content" name="content" ref={this.contentInput}></textarea>
