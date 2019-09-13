@@ -1,35 +1,50 @@
 import React from 'react';
 import config from '../config'
+import cuid from 'cuid';
+import ApiContext from '../ApiContext'
 
 class AddFolder extends React.Component {
 	constructor(props) {
     super(props);
-    this.state = {value: ''};
+		this.state = {
+			name: '',
+			id: ''
+		};
+		this.nameInput = React.createRef();
 	}
-	handleChange = (event) => {
-		this.setState({value: event.target.value});
-  }
+
+	static contextType = ApiContext;
+	
   handleFolderFormSubmit = (event) => {
-		console.log(this.state.value);
 		event.preventDefault();
-		const newFolderName = JSON.stringify(this.state.value)
+
+		const newFolder = JSON.stringify({
+			id: cuid(),
+			name: this.nameInput.current.value
+		})
+		console.log(newFolder)
+
 		fetch(`${config.API_ENDPOINT}/folders`,
 		{
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
-			body: newFolderName
+			body: newFolder
 		})
-		
+		.then(response => response.json())
+		.then(response => this.context.addFolder(response));
 	}
+
 	render() {
 		return (
 			<form onSubmit={this.handleFolderFormSubmit}>
 					<label htmlFor="folder-name"> Folder name</label>
-					<input id="folder-name" type="text" 
+					<input 
+					id="folder-name" 
+					type="text" 
 					name="folder-name"
-					value={this.state.value} 
-					onChange={this.handleChange}
-					></input>
+					ref={this.nameInput}>	
+					
+					</input>
 					<input type="submit" value="Submit" />
 			</form>
 		)
