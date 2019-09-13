@@ -22,7 +22,6 @@ class AddFolder extends React.Component {
 			id: cuid(),
 			name: this.nameInput.current.value
 		})
-		console.log(newFolder)
 
 		fetch(`${config.API_ENDPOINT}/folders`,
 		{
@@ -30,8 +29,16 @@ class AddFolder extends React.Component {
 			headers: { 'content-type': 'application/json' },
 			body: newFolder
 		})
+		.then(res => {
+			if (!res.ok)
+				return res.json().then(e => Promise.reject(e))
+			return res.json()
+		})
 		.then(response => response.json())
-		.then(response => this.context.addFolder(response));
+		.then(response => this.context.addFolder(response))
+		.catch(error => {
+			console.error({ error })
+		})
 	}
 
 	render() {

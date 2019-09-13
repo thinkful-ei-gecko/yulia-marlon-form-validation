@@ -7,6 +7,7 @@ import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
 import ApiContext from '../ApiContext';
 import AddFolder from '../AddFolder/AddFolder';
+import AddNote from '../AddNote/AddNote';
 import config from '../config';
 import './App.css';
 import cuid from 'cuid';
@@ -48,7 +49,13 @@ class App extends Component {
 		this.setState({
 			folders: [...this.state.folders, folder]
 		});
-	}
+    }
+    
+    handleAddNote = (note) => {
+        this.setState({
+            notes: [...this.state.notes, note]
+        })
+    }
 
     renderNavRoutes() {
         return (
@@ -63,7 +70,7 @@ class App extends Component {
                 ))}
                 <Route path="/note/:noteId" component={NotePageNav} />
                 <Route path="/add-folder" component={AddFolder} />
-                <Route path="/add-note" component={NotePageNav} />
+                <Route path="/add-note" component={AddNote} />
             </>
         );
     }
@@ -89,7 +96,8 @@ class App extends Component {
             notes: this.state.notes,
             folders: this.state.folders,
             deleteNote: this.handleDeleteNote,
-            addFolder: this.handleAddFolder
+            addFolder: this.handleAddFolder,
+            addNote: this.handleAddNote
         };
         return (
             <ApiContext.Provider value={value}>
