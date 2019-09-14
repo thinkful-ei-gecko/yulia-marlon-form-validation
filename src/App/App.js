@@ -10,7 +10,7 @@ import AddFolder from '../AddFolder/AddFolder';
 import AddNote from '../AddNote/AddNote';
 import config from '../config';
 import './App.css';
-import cuid from 'cuid';
+// import cuid from 'cuid';
 
 class App extends Component {
     state = {

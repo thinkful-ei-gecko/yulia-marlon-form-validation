@@ -1,14 +1,25 @@
 import React from 'react';
 import config from '../config'
 import cuid from 'cuid';
-import ApiContext from '../ApiContext'
+import ApiContext from '../ApiContext';
+import ValidationError from '../ValidationError';
 
 class AddNote extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-			name: '',
-			folderId: ''
+			name: {
+				value: '',
+			  touched: false
+			},
+			folderId: {
+				value: '',
+				touched: false
+			},
+			content: {
+				value: '',
+				touched: false
+			}
 		}
 		
     this.nameInput = React.createRef();
@@ -22,10 +33,10 @@ class AddNote extends React.Component {
 
 		const newNote = JSON.stringify({
 			id: cuid(),
-      name: this.state.name,
+      name: this.state.name.value,
       modified: new Date(),
-      folderId: this.state.folderId,
-      content: this.contentInput.current.value,
+      folderId: this.state.folderId.value,
+      content: this.state.content.value,
     })
 
 		fetch(`${config.API_ENDPOINT}/notes`,
@@ -40,28 +51,59 @@ class AddNote extends React.Component {
 			return res.json()
 		})
 		.then(response => this.context.addNote(response))
+		.then(
+			this.props.history.push('/')
+		)
 		.catch(error => {
 			console.error({ error })
 		})
 	}
 
-  handleOption = (e) => {
+  updateFolderId = (folderId) => {
     this.setState({
-      folderId: e.target.value
+      folderId: {
+				value: folderId,
+				touched: true
+			}
     })
 	}
 	
-	handleNameInput = (e) => {
+	updateName = (name) => {
 		this.setState({
-			name: e.target.value
+		  name: {
+				value: name,
+				touched: true
+			}
 		})
 	}
 
+	updateContent = (content) => {
+		this.setState({
+			content: {
+				value: content,
+				touched: true
+			}
+		})
+	}
+
+  validateName() {
+		const name = this.state.name.value.trim();
+		  if (name.length === 0) {
+				return 'Name is required'
+			}
+	}
+
+	validateFolderSelect() {
+		const folderIsEmpty = this.state.folderId.value;
+		if (folderIsEmpty === '') {
+			return 'Choose a valid folder';
+		}
+	}
+
 	render() {
-    console.log(this.state.folderId);
     const folderList = this.context.folders.map (folder => {
       return (
-        <option value={folder.id}>{folder.name}</option>
+        <option key= {folder.id} value={folder.id}>{folder.name}</option>
       )
     })
 
@@ -70,20 +112,29 @@ class AddNote extends React.Component {
 			<form onSubmit={this.handleNoteSubmit}>
 					<label htmlFor="note-name">Note name</label>
 					<input 
-					id="note-name" 
-					type="text" 
-					name="note-name"
-					onChange={e => this.handleNameInput(e)}
+						id="note-name" 
+						type="text" 
+						name="note-name"
+						onChange={e => this.updateName(e.target.value)}
 					>
 					</input>
+					{this.state.name.touched && (<ValidationError message = {this.validateName()}/>)}
           <label htmlFor="content">Content</label>
-          <textarea id="content" name="content" ref={this.contentInput}></textarea>
-          <select value={this.state.folderId}
-          onChange={this.handleOption}> 
-          <option>...</option>
+					<textarea id="content" 
+						name="content" 
+						onChange={e => this.updateContent(e.target.value)}
+					></textarea>
+					<select 
+						onChange={e => this.updateFolderId(e.target.value)}
+					>
+					<option>...</option>
             {folderList}
           </select>
-					<input type="submit" value="Submit" />
+					{this.state.folderId.touched && (<ValidationError message = {this.validateFolderSelect()}/>)}
+					<button type="submit"
+					disabled = {this.validateFolderSelect()|| 
+					this.validateName()}
+					>Save</button>
 			</form>
 		)
 	}
