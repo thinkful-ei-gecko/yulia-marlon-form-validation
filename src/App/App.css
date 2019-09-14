@@ -38,3 +38,13 @@
   height: calc(100vh - 120px);
   overflow: auto;
 }
+
+form {
+  margin: 20px;
+  display: flex;
+  flex-direction: column
+}
+
+button[type=submit] {
+  margin-top: 10px;
+}

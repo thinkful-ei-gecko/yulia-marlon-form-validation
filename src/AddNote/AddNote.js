@@ -94,10 +94,8 @@ class AddNote extends React.Component {
 	}
 
 	validateFolderSelect() {
-		const folderIsEmpty = this.state.folderId.value;
-		if (folderIsEmpty === '') {
-			return 'Choose a valid folder';
-		}
+		const folderIsSelected = this.state.folderId.value;
+			return !folderIsSelected;
 	}
 
 	render() {
@@ -110,7 +108,7 @@ class AddNote extends React.Component {
      
 		return (
 			<form onSubmit={this.handleNoteSubmit}>
-					<label htmlFor="note-name">Note name</label>
+					<label htmlFor="note-name">Title *</label>
 					<input 
 						id="note-name" 
 						type="text" 
@@ -124,16 +122,19 @@ class AddNote extends React.Component {
 						name="content" 
 						onChange={e => this.updateContent(e.target.value)}
 					></textarea>
+					<label htmlFor="folders">Save in *</label>
 					<select 
+					  id="folders"
+					  name="folders"
 						onChange={e => this.updateFolderId(e.target.value)}
+						defaultValue="Select Folder"
 					>
-					<option>...</option>
+					<option disabled>Select Folder</option>
             {folderList}
           </select>
-					{this.state.folderId.touched && (<ValidationError message = {this.validateFolderSelect()}/>)}
 					<button type="submit"
-					disabled = {this.validateFolderSelect()|| 
-					this.validateName()}
+					disabled = {this.validateName()||this.validateFolderSelect()
+				}
 					>Save</button>
 			</form>
 		)
