@@ -1,8 +1,9 @@
 import React from 'react';
-import config from '../config'
+import config from '../config';
 import cuid from 'cuid';
 import ApiContext from '../ApiContext';
 import ValidationError from '../ValidationError';
+import PropTypes from 'prop-types';
 
 class AddNote extends React.Component {
 	constructor(props) {
@@ -141,3 +142,11 @@ class AddNote extends React.Component {
 	}
 }
 export default AddNote;
+
+AddNote.propTypes = {
+	folders: PropTypes.arrayOf(PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired,
+	})),
+	addNote: PropTypes.func
+}

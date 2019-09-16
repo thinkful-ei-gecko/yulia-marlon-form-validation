@@ -1,6 +1,6 @@
 import React from 'react';
 
-class AddFolderError extends React.Component {
+class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,13 +11,13 @@ class AddFolderError extends React.Component {
     return { hasError: true };
   }
   render() {
-    if (this.state.hasError) {      
+    if (this.state.hasError) { 
       return (
-        <h2>Could not add folder.</h2>
+        <h2>Sorry! Something went wrong.</h2>
       );
     }
     return this.props.children;
   }  
 }
 
-export default AddFolderError;
+export default ErrorBoundary;

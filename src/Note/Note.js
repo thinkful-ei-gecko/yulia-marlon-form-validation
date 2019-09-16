@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ApiContext from '../ApiContext'
 import config from '../config'
 import './Note.css'
+import PropTypes from 'prop-types';
 
 export default class Note extends React.Component {
   static defaultProps ={
@@ -38,7 +39,7 @@ export default class Note extends React.Component {
   }
 
   render() {
-    const { name, id, modified } = this.props
+    const { name, id, modified } = this.props;
     return (
       <div className='Note'>
         <h2 className='Note__title'>
@@ -68,3 +69,9 @@ export default class Note extends React.Component {
     )
   }
 }
+
+Note.propTypes = {
+	modified: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+	}

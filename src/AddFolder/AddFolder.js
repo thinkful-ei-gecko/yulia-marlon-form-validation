@@ -1,8 +1,9 @@
 import React from 'react';
-import config from '../config'
+import config from '../config';
 import cuid from 'cuid';
-import ApiContext from '../ApiContext'
+import ApiContext from '../ApiContext';
 import ValidationError from '../ValidationError';
+import PropTypes from 'prop-types';
 
 class AddFolder extends React.Component {
 	constructor(props) {
@@ -25,7 +26,7 @@ class AddFolder extends React.Component {
 			name: this.state.name.value
 		})
 
-		fetch(`${config.API_ENDPOINT}/folders`,
+		fetch(`${config.API_ENDPOINT}/folde`,
 		{
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
@@ -64,17 +65,21 @@ class AddFolder extends React.Component {
 	render() {
 		return (
 			<form onSubmit={this.handleFolderFormSubmit}>
-					<label htmlFor="folder-name">Folder name</label>
-					<input 
-					id="folder-name" 
-					type="text" 
-					name="folder-name"
-					onChange = {e => this.updateFolderName(e.target.value)}
-				  ></input>
-					{this.state.name.touched && (<ValidationError message = {this.validateFolderName()}/>)}
-					<button type="submit" disabled={this.validateFolderName()}>Save</button>
+				<label htmlFor="folder-name">Folder name</label>
+				<input 
+				id="folder-name" 
+				type="text" 
+				name="folder-name"
+				onChange = {e => this.updateFolderName(e.target.value)}
+				></input>
+				{this.state.name.touched && (<ValidationError message = {this.validateFolderName()}/>)}
+				<button type="submit" disabled={this.validateFolderName()}>Save</button>
 			</form>
 		)
 	}
 }
 export default AddFolder;
+
+AddFolder.propTypes = {
+	addFolder: PropTypes.func
+}
