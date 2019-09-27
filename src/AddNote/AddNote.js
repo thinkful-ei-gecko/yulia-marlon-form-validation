@@ -22,9 +22,6 @@ class AddNote extends React.Component {
 				touched: false
 			}
 		}
-		
-    this.nameInput = React.createRef();
-    this.contentInput = React.createRef();
 	}
 
 	static contextType = ApiContext;
